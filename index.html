@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
+
+    <input id="load_file" type='file' placeholder="파일">
     <input type="text" id="input_name" placeholder="이름을 입력하세요">
     <button onClick="createLi()" id="create_btn">생성</button>
 
@@ -21,79 +25,120 @@
 
 
     <script>
-        let jsn = [
-            {   
-                "name":"정민",
-                "count":0,
-            },
-            {   
-                "name":"시우",
-                "count":1,
-            },
-        ]
+        let jsn = [];
+        const loadFile = document.getElementById('load_file');
+
+        loadFile.addEventListener('change', function (e) {
+
+            let reader = new FileReader();
+            reader.readAsText(e.target.files[0]);
+            reader.addEventListener('load', e => {
 
 
-            
+                if (e.target.readyState == 2) {
+                    jsn = JSON.parse(e.target.result);
+                    nameList.innerHTML = "";
+                    listMake();
+                }
+            })
 
-        console.log(""+jsn+"")
+        })
+
+
         let element = document.createElement('a');
         let text = JSON.stringify(jsn);
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         element.setAttribute('download', '파일이름.txt');
-            element.innerHTML ="다운로드"
+        element.innerHTML = "다운로드"
+        document.body.appendChild(element)
 
-            document.body.appendChild(element)
 
-        const createBtn= document.getElementById('create_btn');
-        const inputName= document.getElementById('input_name')
+        const createBtn = document.getElementById('create_btn');
+        const inputName = document.getElementById('input_name')
         const nameList = document.querySelector('.name_list')
+        function listMake() {
+            for (let i = 0; i < jsn.length; i++) {
+                let stList = document.createElement('li');
+                stList.innerHTML = `<strong class="name">${jsn[i].name}</strong> : <span class="number">${jsn[i].count}</span> <button class="inc" >증가</button> <button class="del">삭제</button>`;
+                nameList.appendChild(stList)
+                stList.querySelector('.inc').addEventListener('click', e => {
+                    let tag = e.target.parentNode;
+                    tag.querySelector('.number').innerHTML = Number(tag.querySelector('.number').innerHTML) + 1;
+                    let found = jsn.findIndex(x => x.name == tag.querySelector('.name').innerText);
+                    
+                    jsn[found].count++;
+                    text = JSON.stringify(jsn);
+                })
+                stList.querySelector('.del').addEventListener('click', e =>{
+                    let tag = e.target.parentNode;
+                    let found = jsn.findIndex(x => x.name === tag.querySelector('.name').innerText);
 
-        
-        for(let i = 0; i < jsn.length; i++){   
-
-            console.log(jsn[i])
-            let stList = document.createElement('li');
-            stList.innerHTML= `<strong class="name">${jsn[i].name} </strong>: <span class="number">${jsn[i].count}</span> <button class="inc" >증가</button>`;
-            nameList.appendChild(stList)
-            stList.querySelector('.inc').addEventListener('click', e=>{
-                e.target.parentNode.querySelector('.number').innerHTML = Number(e.target.parentNode.querySelector('.number').innerHTML) +1
-            })
-
-        }
-        
-
-        function createLi(){
-
-            if(inputName.value == ""){
-                alert("이름을 입력하쇼")
-            }else{
-                let inputVal = inputName.value;
-                let list = document.createElement('li');
-                list.innerHTML = `<strong class="name">${inputName.value} </strong>: <span class="number">0</span> <button class="inc" >증가</button>`;
-                nameList.appendChild(list)
-                list.querySelector('.inc').addEventListener('click', e=>{
-                    e.target.parentNode.querySelector('.number').innerHTML = Number(e.target.parentNode.querySelector('.number').innerHTML) +1
+                    
+                    let filters = jsn.splice(found, 1);
+                    nameList.innerHTML = "";
+                    listMake();
+                    text = JSON.stringify(jsn);
+                    
                 })
 
+            }
+        }
+
+
+        function createLi() {
+
+            if (inputName.value == "") {
+                alert("이름을 입력하쇼")
+            } else {
+                let inputVal = inputName.value;
+                let list = document.createElement('li');
+                list.innerHTML = `<strong class="name">${inputName.value}</strong> : <span class="number">0</span> <button class="inc" >증가</button> <button class="del">삭제</button>`;
+                nameList.appendChild(list)
+                let plOb = {};
+                plOb.name = inputName.value;
+                plOb.count = 0;
+
+                jsn.push(plOb)
+
+
+                list.querySelector('.inc').addEventListener('click', e => {
+                    let tag = e.target.parentNode;
+                    tag.querySelector('.number').innerHTML = Number(tag.querySelector('.number').innerHTML) + 1;
+
+
+
+                    let found = jsn.findIndex(x => x.name == tag.querySelector('.name').innerText);
+
+                    jsn[found].count++;
+
+                    text = JSON.stringify(jsn);
+                })
+                list.querySelector('.del').addEventListener('click', e =>{
+                    let tag = e.target.parentNode;
+                    let found = jsn.findIndex(x => x.name === tag.querySelector('.name').innerText);
+
+                    
+                    let filters = jsn.splice(found, 1);
+                    nameList.innerHTML = "";
+                    listMake();
+                    text = JSON.stringify(jsn);
+                    
+                })
                 
+
 
                 inputName.value = "";
             }
-            
+
         }
 
-        function pushs(){
-            if(nameList.querySelectorAll("li").length){
-                let listLeng = nameList.querySelectorAll("li");
-                for(let i = 0; i < listLeng.length ; i++){
-                    console.log(listLeng[i].querySelector(".name").innerText)
-                    console.log(Number(listLeng[i].querySelector('.number').innerText))
-                }
-            }
+        function pushs() {
+
             console.log(jsn)
         }
 
 
     </script>
 </body>
+
 </html>

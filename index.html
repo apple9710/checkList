@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="input_name" placeholder="이름을 입력하세요">
+    <button onClick="createLi()" id="create_btn">생성</button>
+
+
+
+    <ul class="name_list">
+
+    </ul>
+    <button onClick="pushs()">저장</button>
+
+
+
+
+
+    <script>
+        let jsn = [
+            {   
+                "name":"정민",
+                "count":0,
+            },
+            {   
+                "name":"시우",
+                "count":1,
+            },
+        ]
+
+
+            
+
+        console.log(""+jsn+"")
+        let element = document.createElement('a');
+        let text = JSON.stringify(jsn);
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', '파일이름.txt');
+            element.innerHTML ="다운로드"
+
+            document.body.appendChild(element)
+
+        const createBtn= document.getElementById('create_btn');
+        const inputName= document.getElementById('input_name')
+        const nameList = document.querySelector('.name_list')
+
+        
+        for(let i = 0; i < jsn.length; i++){   
+
+            console.log(jsn[i])
+            let stList = document.createElement('li');
+            stList.innerHTML= `<strong class="name">${jsn[i].name} </strong>: <span class="number">${jsn[i].count}</span> <button class="inc" >증가</button>`;
+            nameList.appendChild(stList)
+            stList.querySelector('.inc').addEventListener('click', e=>{
+                e.target.parentNode.querySelector('.number').innerHTML = Number(e.target.parentNode.querySelector('.number').innerHTML) +1
+            })
+
+        }
+        
+
+        function createLi(){
+
+            if(inputName.value == ""){
+                alert("이름을 입력하쇼")
+            }else{
+                let inputVal = inputName.value;
+                let list = document.createElement('li');
+                list.innerHTML = `<strong class="name">${inputName.value} </strong>: <span class="number">0</span> <button class="inc" >증가</button>`;
+                nameList.appendChild(list)
+                list.querySelector('.inc').addEventListener('click', e=>{
+                    e.target.parentNode.querySelector('.number').innerHTML = Number(e.target.parentNode.querySelector('.number').innerHTML) +1
+                })
+
+                
+
+                inputName.value = "";
+            }
+            
+        }
+
+        function pushs(){
+            if(nameList.querySelectorAll("li").length){
+                let listLeng = nameList.querySelectorAll("li");
+                for(let i = 0; i < listLeng.length ; i++){
+                    console.log(listLeng[i].querySelector(".name").innerText)
+                    console.log(Number(listLeng[i].querySelector('.number').innerText))
+                }
+            }
+            console.log(jsn)
+        }
+
+
+    </script>
+</body>
+</html>

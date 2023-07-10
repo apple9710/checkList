@@ -68,6 +68,7 @@
                     
                     jsn[found].count++;
                     text = JSON.stringify(jsn);
+                    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
                 })
                 stList.querySelector('.del').addEventListener('click', e =>{
                     let tag = e.target.parentNode;
@@ -78,7 +79,7 @@
                     nameList.innerHTML = "";
                     listMake();
                     text = JSON.stringify(jsn);
-                    
+                    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
                 })
 
             }
@@ -112,6 +113,7 @@
                     jsn[found].count++;
 
                     text = JSON.stringify(jsn);
+                    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
                 })
                 list.querySelector('.del').addEventListener('click', e =>{
                     let tag = e.target.parentNode;
@@ -122,7 +124,7 @@
                     nameList.innerHTML = "";
                     listMake();
                     text = JSON.stringify(jsn);
-                    
+                    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
                 })
                 
 
@@ -134,7 +136,10 @@
 
         function pushs() {
 
-            console.log(jsn)
+            console.log(jsn)    
+            text = JSON.stringify(jsn);
+            console.log(text)
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         }
 
 
